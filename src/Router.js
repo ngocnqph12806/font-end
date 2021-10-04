@@ -1,0 +1,74 @@
+import React from 'react';
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import MobileMenu from "./layout/MobileMenu";
+import ModalLogin from "./layout/ModalLogin";
+import HeaderDOM from "./layout/Header";
+import FooterDOM from "./layout/FooterDOM";
+import HomePage from "./page/HomePage";
+import ListProductPage from "./page/ListProductPage";
+import DetailProductPage from "./page/DetailProductPage";
+import ListOrderPage from "./page/ListOrderPage";
+import DetailOrderPage from "./page/DetailOrderPage";
+import ProfilePage from "./page/ProfilePage";
+import EditProfilePage from "./page/EditProfilePage";
+import SearchProductPage from "./page/SearchProductPage";
+import NotFoundPage from "./page/NotFoundPage";
+import CartPage from "./page/CartPage";
+import CheckoutPage from "./page/CheckoutPage";
+
+const RouterDOM = (props) => {
+    return (
+        <BrowserRouter>
+            <div className="page-wrapper">
+                <HeaderDOM {...props}/>
+                <main className="main">
+                    <Switch>
+                        <Route exact path={['/order', '/order.html']}>
+                            <ListOrderPage {...props}/>
+                        </Route>
+                        <Route exact path={['/cart', '/cart.html']}>
+                            <CartPage {...props}/>
+                        </Route>
+                        <Route exact path={['/checkout', '/checkout.html']}>
+                            <CheckoutPage {...props}/>
+                        </Route>
+                        <Route exact path={'/order/:id'}>
+                            <DetailOrderPage {...props}/>
+                        </Route>
+                        <Route exact path={['/product', '/product.html']}>
+                            <ListProductPage {...props}/>
+                        </Route>
+                        <Route exact path={['/category/:idPath/:path']}>
+                            <ListProductPage {...props}/>
+                        </Route>
+                        <Route exact path={'/product/:idPath/:path'}>
+                            <DetailProductPage {...props}/>
+                        </Route>
+                        <Route exact path={'/search'}>
+                            <SearchProductPage {...props}/>
+                        </Route>
+                        <Route exact path={['/profile', '/profile.html']}>
+                            <ProfilePage {...props}/>
+                        </Route>
+                        <Route exact path={'/profile/edit/:username'}>
+                            <EditProfilePage {...props}/>
+                        </Route>
+                        <Route exact path={['/', '/index.html']}>
+                            <HomePage {...props}/>
+                        </Route>
+                        <Route path={'*'}>
+                            <NotFoundPage/>
+                        </Route>
+                    </Switch>
+                </main>
+                <FooterDOM/>
+                <button id="scroll-top" title="Back to Top"><i className="icon-arrow-up"></i></button>
+                <div className="mobile-menu-overlay"></div>
+                <MobileMenu/>
+                <ModalLogin/>
+            </div>
+        </BrowserRouter>
+    );
+};
+
+export default RouterDOM;
