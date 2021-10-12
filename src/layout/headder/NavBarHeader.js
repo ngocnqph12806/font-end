@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink} from "react-router-dom";
-import {getSessionStorage, sumPriceOfArrayObject} from "../../service/UtilsAPI";
 
 const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
 
-    console.log(cart)
-
     const deleteCart = (e) => {
-        console.log(e.target.dataset.idProduct)
         let idProductCartDelete = e.target.dataset.idProduct
         let objCart = cart.filter(e => e.product.id !== idProductCartDelete)
         setCart(objCart)

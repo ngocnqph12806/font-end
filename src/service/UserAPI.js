@@ -1,5 +1,6 @@
 import React from 'react';
-import {LoginAPI, ServerAPI} from "./AxiosAPI";
+import {CheckToken, LoginAPI, ServerAPI} from "./AxiosAPI";
+import {getSessionStorage} from "./UtilsAPI";
 
 const UserAPI = {
     login(username, password) {
@@ -10,9 +11,9 @@ const UserAPI = {
         let url = `/users/${id}`
         return ServerAPI.get(url)
     },
-    add(obj){
-      let url = `/users`
-      return ServerAPI.post(url, obj)
+    add(obj) {
+        let url = `/users`
+        return ServerAPI.post(url, obj)
     },
     update(obj) {
         let url = `/users/${obj.id}`;
@@ -21,6 +22,17 @@ const UserAPI = {
     changePassword(oldPassword, newPassword) {
         let url = `/users/change-password`
         return ServerAPI.post(url, {newPassword: newPassword, oldPassword: oldPassword})
+    },
+    checkLogin() {
+        return ServerAPI.get("token/refresh");
+    },
+    getInfoCheckout() {
+        let url = "/users/get-info-checkout?id=" + getSessionStorage("id_user_login")
+        return ServerAPI.get(url);
+    },
+    getIdByUsernameLogin(userLogin) {
+        let url = `/users/get-id-by-user-login?username=${userLogin}`
+        return ServerAPI.get(url);
     }
 };
 

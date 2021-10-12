@@ -167,8 +167,6 @@ $(document).ready(function () {
         // Check if #price-slider elem is exists if not return
         // to prevent error logs
         if (priceSlider == null) return;
-        console.log(priceSlider.dataset.min)
-        console.log(priceSlider.dataset.max)
         noUiSlider.create(priceSlider, {
             start: [Number(priceSlider.dataset.min), Number(priceSlider.dataset.max)],
             connect: true,

@@ -5,6 +5,10 @@ const ProductAPI = {
         let url = `/product`;
         return ServerAPI.get(url);
     },
+    getFieldFilterById(id) {
+        let url = `/product/${id}?field-filter`;
+        return ServerAPI.get(url)
+    },
     getPage(p, s) {
         let url = `/product?_p=${p}&_s=${s}`;
         return ServerAPI.get(url);
@@ -24,6 +28,14 @@ const ProductAPI = {
     getById(id) {
         let url = `/product/${id}`;
         return ServerAPI.get(url);
+    },
+    saveReview(obj) {
+        let url = `/reviews`
+        return ServerAPI.post(url, obj);
+    },
+    filterAll(obj) {
+        let url = `/product`;
+        return ServerAPI.get(url, obj);
     }
 }
 

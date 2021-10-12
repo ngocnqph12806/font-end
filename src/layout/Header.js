@@ -6,7 +6,11 @@ const HeaderDOM = (props) => {
     return (
         <>
             <header className="header">
-                <TopBarHeader/>
+                <TopBarHeader
+                    userLogin={props.userLogin}
+                    fnSetLogin={props.fnSetLogin}
+                    listWishlist={props.listWishlist}
+                />
                 <NavBarHeader
                     listCategories={props.listCategories}
                     cart={props.cart}

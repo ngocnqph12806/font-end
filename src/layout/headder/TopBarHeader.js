@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 
-const TopBarHeader = () => {
+const TopBarHeader = (props) => {
     return (
         <div className="header-top">
             <div className="container">
@@ -36,11 +36,32 @@ const TopBarHeader = () => {
                             <NavLink to="#">Links</NavLink>
                             <ul>
                                 <li><NavLink to="tel:#"><i className="icon-phone"/>Call: +0123 456 789</NavLink></li>
-                                <li><NavLink to="wishlist.html"><i className="icon-heart-o"/>My
-                                    Wishlist <span>(3)</span></NavLink></li>
+                                <li>
+                                    <NavLink to="wishlist.html"><i className="icon-heart-o"/>My
+                                        Wishlist <span>
+                                        ({props.listWishlist !== null && props.listWishlist !== undefined ? props.listWishlist.length : 0})
+                                    </span>
+                                    </NavLink>
+                                </li>
                                 <li><NavLink to="about.html">About Us</NavLink></li>
                                 <li><NavLink to="contact.html">Contact Us</NavLink></li>
-                                <li><NavLink to="#signin-modal" data-toggle="modal"><i className="icon-user"/>Login</NavLink></li>
+                                <li>
+                                    {
+                                        props.userLogin !== null && props.userLogin !== undefined && props.userLogin.trim() !== ''
+                                            ? (
+                                                <NavLink to="/logout" data-toggle="modal">
+                                                    <i className="icon-user"/>
+                                                    Đăng xuất
+                                                </NavLink>
+                                            )
+                                            : (
+                                                <NavLink to="/login" data-toggle="modal">
+                                                    <i className="icon-user"/>
+                                                    Đăng nhập
+                                                </NavLink>
+                                            )
+                                    }
+                                </li>
                             </ul>
                         </li>
                     </ul>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {ServerAPI} from "./AxiosAPI";
+import {getSessionStorage} from "./UtilsAPI";
 
 const OrderAPI = {
     getAllByUser() {
@@ -17,6 +18,15 @@ const OrderAPI = {
     update(obj) {
         let url = `/orders/${obj.id}`
         return ServerAPI.post(url, obj)
+    },
+    save(obj) {
+        obj.idUser = getSessionStorage("id_user_login")
+        let url = '/orders/checkout'
+        return ServerAPI.post(url, obj);
+    },
+    findAllOrderByUserLogin() {
+        let url = `/orders/get-by-user-login?id=${getSessionStorage("id_user_login")}`
+        return ServerAPI.get(url);
     }
 };
 

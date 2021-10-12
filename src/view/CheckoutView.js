@@ -28,7 +28,7 @@ const CheckoutView = (props) => {
                     <div className="container">
                         {
                             props.codeVoucher !== null && props.codeVoucher !== undefined ?
-                                "" : (
+                                null : (
                                     <div className="checkout-discount">
                                         <form action="#">
                                             <input id="code-checkout checkout-discount-input" type="text"
@@ -42,10 +42,14 @@ const CheckoutView = (props) => {
                         <form id="id-form-checkout">
                             <div className="row">
                                 <div className="col-lg-9">
+                                    <label>Sử dụng thông tin tài khoản đăng nhập</label>
+                                    <input onClick={props.fnClickGetInfoCheckout} name="village" type="checkbox" className="form-control"
+                                           placeholder="Xuân Dương" />
                                     <h2 className="checkout-title">Chi tiết người nhận</h2>{/* End .checkout-title */}
                                     <label>Họ và tên *</label>
                                     <input type="text" className="form-control" required
-                                           name="fullName" placeholder="Nguyễn Văn A"/>
+                                           name="fullName" placeholder="Nguyễn Văn A"
+                                           defaultValue={props.infoCheckout.fullName}/>
                                     <label>Số nhà, thôn / xóm *</label>
                                     <input name="village" type="text" className="form-control"
                                            placeholder="Xuân Dương"/>
@@ -71,13 +75,15 @@ const CheckoutView = (props) => {
                                         <div className="col-sm-6">
                                             <label>Địa chỉ email *</label>
                                             <input name="email" type="text" className="form-control" required
-                                                   placeholder="email@polymart.xyz"/>
+                                                   placeholder="email@polymart.xyz"
+                                                   defaultValue={props.infoCheckout.email}/>
                                         </div>
                                         {/* End .col-sm-6 */}
                                         <div className="col-sm-6">
                                             <label>Số điện thoại *</label>
                                             <input name="phoneNumber" type="tel" className="form-control"
-                                                   required placeholder="0344623xxxx"/>
+                                                   required placeholder="0344623xxxx"
+                                                   defaultValue={props.infoCheckout.phoneNumber}/>
                                         </div>
                                         {/* End .col-sm-6 */}
                                     </div>
@@ -139,10 +145,10 @@ const CheckoutView = (props) => {
                                             <div className="card">
                                                 <div className="card-header" id="heading-1">
                                                     <h2 className="card-title">
-                                                        <Link role="button" data-toggle="collapse" to="#cash"
-                                                           aria-expanded="true" aria-controls="cash">
+                                                        <a role="button" data-toggle="collapse" href="#cash"
+                                                              aria-expanded="true" aria-controls="cash">
                                                             Thanh toán tiền mặt
-                                                        </Link>
+                                                        </a>
                                                     </h2>
                                                 </div>
                                                 {/* End .card-header */}
@@ -159,11 +165,11 @@ const CheckoutView = (props) => {
                                             <div className="card">
                                                 <div className="card-header" id="heading-2">
                                                     <h2 className="card-title">
-                                                        <Link className="collapsed" role="button" data-toggle="collapse"
-                                                           to="#card" aria-expanded="false"
-                                                           aria-controls="card">
+                                                        <a className="collapsed" role="button" data-toggle="collapse"
+                                                              href="#card" aria-expanded="false"
+                                                              aria-controls="card">
                                                             Thanh toán bằng thẻ
-                                                        </Link>
+                                                        </a>
                                                     </h2>
                                                 </div>
                                                 {/* End .card-header */}
@@ -182,11 +188,11 @@ const CheckoutView = (props) => {
                                             <div className="card">
                                                 <div className="card-header" id="heading-3">
                                                     <h2 className="card-title">
-                                                        <Link className="collapsed" role="button" data-toggle="collapse"
-                                                           to="#online" aria-expanded="false"
-                                                           aria-controls="online">
+                                                        <a className="collapsed" role="button" data-toggle="collapse"
+                                                              href="#online" aria-expanded="false"
+                                                              aria-controls="online">
                                                             Thanh toán trực tuyến
-                                                        </Link>
+                                                        </a>
                                                     </h2>
                                                 </div>
                                                 {/* End .card-header */}

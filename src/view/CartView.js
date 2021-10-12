@@ -163,7 +163,7 @@ const CartView = (props) => {
                                         </tbody>
                                     </table>
                                     {/* End .table table-summary */}
-                                    <Link to="/checkout.html"
+                                    <Link to="/checkout.html" onClick={props.fnRedirectLoginPage}
                                           className="btn btn-primary btn-order btn-block">
                                         Thanh toán
                                     </Link>

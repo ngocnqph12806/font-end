@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import SideBarListProduct from "../layout/product/SideBarListProduct";
 
-const ListProductView = ({listProducts, listCategories, filterPrice, filterColor}) => {
+const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fnFilterCategory}) => {
 
     const [introProduct, setIntroProduct] = useState();
-
 
     useEffect(() => {
         const showIntroProduct = () => (
@@ -31,18 +30,20 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                                 <div className="product-action-vertical">
                                     <Link to="#"
                                           className="btn-product-icon btn-wishlist btn-expandable">
-                                        <span>add to wishlist</span>
+                                        <span>Thêm yêu thích</span>
                                     </Link>
                                     <Link to="popup/quickView.html"
                                           className="btn-product-icon btn-quickview"
-                                          title="Quick view"><span>Quick view</span></Link>
-                                    <Link to="#" className="btn-product-icon btn-compare" title="Compare">
-                                        <span>Compare</span>
+                                          title="Xem trước"><span>Xem trước</span></Link>
+                                    <Link to="#" className="btn-product-icon btn-compare" title="Thêm so sánh">
+                                        <span>Thêm so sánh</span>
                                     </Link>
                                 </div>
                                 {/* End .product-action-vertical */}
                                 <div className="product-action">
-                                    <Link to="#" className="btn-product btn-cart"><span>add to cart</span></Link>
+                                    <Link to="#" className="btn-product btn-cart" onClick={() => fnAddCart(product)}>
+                                        <span>Thêm giỏ hàng</span>
+                                    </Link>
                                 </div>
                                 {/* End .product-action */}
                             </figure>
@@ -86,7 +87,7 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
             ))
         )
         setIntroProduct(showIntroProduct())
-    }, [listProducts]);
+    }, [fnAddCart, listProducts]);
 
 
     return (
@@ -95,7 +96,7 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                 <div className="page-header text-center"
                      style={{backgroundImage: 'url("/assets/images/page-header-bg.jpg")'}}>
                     <div className="container">
-                        <h1 className="page-title">Grid 3 Columns<span>Shop</span></h1>
+                        <h1 className="page-title">Danh sách sản phẩm<span>polymart.xyz</span></h1>
                     </div>
                     {/* End .container */}
                 </div>
@@ -118,20 +119,20 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                                 <div className="toolbox">
                                     <div className="toolbox-left">
                                         <div className="toolbox-info">
-                                            Showing <span>9 of 56</span> Products
+                                            Hiển thị <span>9 / {listProducts.length}</span> sản phẩm
                                         </div>
                                         {/* End .toolbox-info */}
                                     </div>
                                     {/* End .toolbox-left */}
                                     <div className="toolbox-right">
                                         <div className="toolbox-sort">
-                                            <label htmlFor="sortby">Sort by:</label>
+                                            <label htmlFor="sortby">Sắp xếp:</label>
                                             <div className="select-custom">
                                                 <select name="sortby" id="sortby" className="form-control"
                                                         defaultValue={`rating`}>
-                                                    <option value="popularity">Most Popular</option>
-                                                    <option value="rating">Most Rated</option>
-                                                    <option value="date">Date</option>
+                                                    <option value="desc">Giá giảm dần</option>
+                                                    <option value="asc">Giá tăng dần</option>
+                                                    <option value="date">Mới nhất</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -155,7 +156,7 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                                                 <span aria-hidden="true">
                                                     <i className="icon-long-arrow-left"/>
                                                 </span>
-                                                Prev
+                                                Trước
                                             </Link>
                                         </li>
                                         <li className="page-item active" aria-current="page">
@@ -166,8 +167,9 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                                         <li className="page-item-total">of 6</li>
                                         <li className="page-item">
                                             <Link className="page-link page-link-next" to="#" aria-label="Next">
-                                                Next <span aria-hidden="true"><i
-                                                className="icon-long-arrow-right"/></span>
+                                                Tiếp theo
+                                                <span aria-hidden="true"><i
+                                                    className="icon-long-arrow-right"/></span>
                                             </Link>
                                         </li>
                                     </ul>
@@ -176,8 +178,8 @@ const ListProductView = ({listProducts, listCategories, filterPrice, filterColor
                             {/* End .col-lg-9 */}
                             <SideBarListProduct
                                 listCategories={listCategories}
-                                filterPrice={filterPrice}
-                                filterColor={filterColor}
+                                objFilter={objFilter}
+                                fnFilterCategory={fnFilterCategory}
                             />
                         </div>
                         {/* End .row */}

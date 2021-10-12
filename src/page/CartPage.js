@@ -4,10 +4,8 @@ import CartView from "../view/CartView";
 const CartPage = (props) => {
 
     const fnChangeQuantity = (e) => {
-        console.log(e.quantity)
         let objProductCart = e;
         objProductCart.quantity = Number(document.getElementById(e.product.id).value)
-        console.log(objProductCart)
         if (props.cart !== null && props.cart !== undefined && props.cart.length > 0) {
             let arrCartFake = props.cart.map(p => p.product.id === e.product.id ? e : p)
             props.setCart(arrCartFake)
@@ -15,7 +13,6 @@ const CartPage = (props) => {
     }
 
     const fnRemoveProductInCart = (e) => {
-        console.log(e)
         if (props.cart !== null && props.cart !== undefined && props.cart.length > 0) {
             let arrCartFake = props.cart.filter(p => p.product.id !== e.product.id)
             props.setCart(arrCartFake)
@@ -28,7 +25,7 @@ const CartPage = (props) => {
             console.log("Mã giảm giá không được để trống")
             return;
         }
-        props.setCodeVoucher(code) ? console.log("Đã áp dụng code") : console.log("Code không hợp lệ")
+        props.setCodeVoucher({code: code}) ? console.log("Đã áp dụng code") : console.log("Code không hợp lệ")
     }
 
     return (

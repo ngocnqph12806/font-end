@@ -2,13 +2,22 @@ import React, {useEffect, useState} from 'react';
 import DetailProductView from "../view/DetailProductView";
 import {useParams} from "react-router-dom";
 import {WishlistAPI} from "../service/WishlistAPI";
-import UserAPI from "../service/UserAPI";
+import ProductAPI from "../service/ProductAPI";
+import ServiceAPI from "../service/ServiceAPI";
+import {useHistory} from "react-router-dom/cjs/react-router-dom";
+import swal from 'sweetalert'
 
 const DetailsProductPage = (props) => {
 
     const [product, setProduct] = useState({});
 
     const [listProductOfCategory, setListProductOfCategory] = useState([]);
+
+    const [wishList, setWishList] = useState(false);
+
+    let history = useHistory();
+
+    let nameFile = '';
 
     let {idPath, path} = useParams();
 
@@ -20,61 +29,77 @@ const DetailsProductPage = (props) => {
 
     useEffect(() => {
         // eslint-disable-next-line no-unused-expressions
-        props.listProducts !== null && props.listProducts !== undefined
-            ? props.listProducts.filter(e => e.idCategory === product.idCategory
-                ? setListProductOfCategory([...listProductOfCategory, e])
-                : null)
-            : null
-    }, [product]);
+        if (props.listProducts !== null && props.listProducts !== undefined) {
+            let arrFake = props.listProducts.filter(e => e.idCategory === product.idCategory)
+            setListProductOfCategory([...listProductOfCategory, ...arrFake])
+        }
+        if (props.listWishlist !== null && props.listWishlist !== undefined) {
+            let objFake = props.listWishlist.filter(e => e.idProduct === product.id);
+            if (objFake !== null && objFake !== undefined && objFake.length > 0) {
+                setWishList(true)
+            }
+        }
+    }, [product, props.listWishlist]);
 
     const fnAddCart = () => {
         let quantity = document.getElementById('qty').value
-        let objCart = props.cart;
-        console.log(objCart)
-        if (objCart !== null && objCart !== undefined && objCart.length > 0) {
-            for (let i = 0; i < objCart.length; i++) {
-                if (objCart[i].product.id !== null && objCart[i].product.id !== undefined && objCart[i].product.id === product.id) {
-                    quantity = Number(objCart[i].quantity) + Number(quantity);
-                    if (Number(objCart[i].quantity) >= 10) {
-                        console.log('Số lượng đã đạt tối đa')
-                        return;
-                    }
-                    if (Number(quantity) > 10) {
-                        quantity = 10
-                    }
-                    objCart[i].quantity = quantity
-                    props.setCart(objCart);
-                    console.log('Lưu thành công')
-                    return;
-                }
-            }
-        }
-        let objFake = [...objCart, {
-            product:
-                {
-                    id: product.id,
-                    name: product.name,
-                    idPath: product.idPath,
-                    path: product.path,
-                    price: product.price,
-                    image: product.images !== null && product.images !== undefined && product.images.length > 0
-                        ? product.images[0].path : ""
-                }
-            , quantity: Number(quantity)
-        }]
-        props.setCart(objFake);
-        console.log('Lưu thành công')
+        props.fnAddCart(quantity, product)
     }
 
-    const fnWishlist = async () => {
-        let {data: {access_token}} = await UserAPI.login("username", "12345678")
-        console.log(access_token)
-        console.log('đã đăng nhập')
-        // let objWishlist = {idProduct: product.id, idVisit: "123"}
-        // console.log(objWishlist)
-        // let result = WishlistAPI.save(objWishlist);
-        // console.log(result)
+    const fnWishlist = () => {
+        if (props.userLogin !== null && props.userLogin !== undefined && props.userLogin !== '') {
+            let objWishlist = {idProduct: product.id}
+            WishlistAPI.update(objWishlist)
+                .then(r => {
+                        setWishList(!wishList)
+                        if (r.data) {
+                            props.setListWishlist([...props.listWishlist, objWishlist])
+                        } else {
+                            if (props.listWishlist !== null && props.listWishlist !== undefined) {
+                                let arrWishlistFake = props.listWishlist.filter(e => e.idProduct !== objWishlist.idProduct)
+                                props.setListWishlist(arrWishlistFake);
+                            }
+                        }
+                    }
+                );
+        } else {
+            history.push("/login")
+        }
     }
+
+    const fnReviewProduct = async (value) => {
+        value.idProduct = product.id
+        value.point = Number(value.point) * 20
+        value.introduce = false
+        if (nameFile !== null && nameFile !== undefined && nameFile !== '') {
+            value.images = [nameFile]
+        }
+        await ProductAPI.saveReview(value)
+            .then(e => console.log("Thêm review thành công"))
+            .catch(r => {
+                console.log("Thêm review thất bại")
+                if ((r + '').includes('500')) {
+                    console.log("Bạn đã đánh giá rồi")
+                    swal('Thất bại', 'Bạn đã đánh giá cho sản phẩm này rồi', 'error')
+                }else if ((r + '').includes('403')) {
+                    console.log("Bạn đã đánh giá rồi")
+                    swal('Thất bại', 'Vui lòng đăng nhập trước khi gửi đánh giá', 'error')
+                }
+            })
+    }
+
+    const fnUploadFile = async (e) => {
+        if (e.target.files && e.target.files[0]) {
+            let data = await ServiceAPI.toBase64(e.target.files[0])
+            let base = data.substring(data.indexOf(",") + 1, data.length)
+            nameFile = ServiceAPI.convertNameFile(e.target.files[0].name)
+            await ServiceAPI.saveToGit(base, nameFile)
+            document.getElementById('img-review-upload').src = data
+        }
+    }
+
+    // find average age of students
+    
 
     return (
         <>
@@ -83,6 +108,10 @@ const DetailsProductPage = (props) => {
                 listProductOfCategory={listProductOfCategory}
                 fnAddCart={fnAddCart}
                 fnWishlist={fnWishlist}
+                wishlist={wishList}
+                userLogin={props.userLogin}
+                fnReviewProduct={fnReviewProduct}
+                fnUploadFile={fnUploadFile}
             />
         </>
     );

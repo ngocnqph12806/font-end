@@ -1,7 +1,6 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import MobileMenu from "./layout/MobileMenu";
-import ModalLogin from "./layout/ModalLogin";
 import HeaderDOM from "./layout/Header";
 import FooterDOM from "./layout/FooterDOM";
 import HomePage from "./page/HomePage";
@@ -15,6 +14,8 @@ import SearchProductPage from "./page/SearchProductPage";
 import NotFoundPage from "./page/NotFoundPage";
 import CartPage from "./page/CartPage";
 import CheckoutPage from "./page/CheckoutPage";
+import LoginPage from "./page/LoginPage";
+import LogoutPage from "./page/LogoutPage";
 
 const RouterDOM = (props) => {
     return (
@@ -35,10 +36,7 @@ const RouterDOM = (props) => {
                         <Route exact path={'/order/:id'}>
                             <DetailOrderPage {...props}/>
                         </Route>
-                        <Route exact path={['/product', '/product.html']}>
-                            <ListProductPage {...props}/>
-                        </Route>
-                        <Route exact path={['/category/:idPath/:path']}>
+                        <Route exact path={['/product', '/product.html', '/category/:idPath/:path']}>
                             <ListProductPage {...props}/>
                         </Route>
                         <Route exact path={'/product/:idPath/:path'}>
@@ -53,6 +51,12 @@ const RouterDOM = (props) => {
                         <Route exact path={'/profile/edit/:username'}>
                             <EditProfilePage {...props}/>
                         </Route>
+                        <Route exact path={['/login', '/login.html']}>
+                            <LoginPage {...props}/>
+                        </Route>
+                        <Route exact path={['/logout', '/logout.html']}>
+                            <LogoutPage {...props}/>
+                        </Route>
                         <Route exact path={['/', '/index.html']}>
                             <HomePage {...props}/>
                         </Route>
@@ -62,10 +66,12 @@ const RouterDOM = (props) => {
                     </Switch>
                 </main>
                 <FooterDOM/>
-                <button id="scroll-top" title="Back to Top"><i className="icon-arrow-up"></i></button>
-                <div className="mobile-menu-overlay"></div>
+                <button id="scroll-top" title="Back to Top">
+                    <i className="icon-arrow-up"/>
+                </button>
+                <div className="mobile-menu-overlay"/>
                 <MobileMenu/>
-                <ModalLogin/>
+                />
             </div>
         </BrowserRouter>
     );
