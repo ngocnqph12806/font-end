@@ -82,7 +82,6 @@ const DetailsProductPage = (props) => {
                     console.log("Bạn đã đánh giá rồi")
                     swal('Thất bại', 'Bạn đã đánh giá cho sản phẩm này rồi', 'error')
                 }else if ((r + '').includes('403')) {
-                    console.log("Bạn đã đánh giá rồi")
                     swal('Thất bại', 'Vui lòng đăng nhập trước khi gửi đánh giá', 'error')
                 }
             })

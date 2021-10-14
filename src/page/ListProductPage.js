@@ -10,38 +10,57 @@ const ListProductPage = (props) => {
 
     const [listProducts, setListProducts] = useState([]);
 
+    const [numberPageNow, setNumberPageNow] = useState(0);
+
+    const [fieldSort, setFieldSort] = useState("created");
+
+    const [typeSort, setTypeSort] = useState("desc");
+
     useEffect(() => {
-        if (idPath !== null && idPath !== undefined && path !== null && path !== undefined) {
-            props.listCategories.map(category => category.idPath === Number(idPath) && category.path === path ? setListProducts(category.products) : null)
-        } else {
-            setListProducts(props.listProducts)
-        }
-    }, [idPath, path, props.listProducts, props.listCategories]);
+        fnLoadProduct().then()
+    }, []);
+
+    useEffect(() => {
+        console.log("vafo ddaay")
+        fnLoadProduct().then()
+    }, [numberPageNow, fieldSort, typeSort]);
+
+    const fnLoadProduct = async () => {
+        let getSerialize = $('#form-filter-product').serialize()
+        await ProductAPI.filterAndSort(getSerialize, numberPageNow, 9, fieldSort, typeSort)
+            .then(s => {
+                let {data} = s
+                setListProducts([...data])
+                if (data.length < 9) {
+                    let idBtnLoadMoreProduct = $('#load-more-list-product')
+                    idBtnLoadMoreProduct[0].hidden = true
+                }
+            }).catch(e => {
+                console.log("Không đọc được dữ liệu list product page: " + numberPageNow)
+            })
+    }
 
     const fnAddCart = (product) => {
         let quantity = 1
         props.fnAddCart(quantity, product)
     }
 
+    const fnFieldSort = async (e) => {
+        let _type = e.target.value
+        setFieldSort("price")
+        setTypeSort(_type);
+        if (_type === "date_desc") {
+            setFieldSort("created");
+            setTypeSort("desc")
+        } else if (_type === "desc") {
+            setFieldSort("price")
+        } else if (_type === "asc") {
+            setFieldSort("price")
+        }
+    }
+
     const fnFilterCategory = async () => {
-        console.log($('#form-filter-product').serialize())
-        let getSerialize = $('#form-filter-product').serialize();
-        let {data} = await ProductAPI.filter(getSerialize)
-        console.log(data)
-       //  console.log()
-       //  let getNameFilterCategory = $("[name*='filter-category']")
-       //  // eslint-disable-next-line array-callback-return
-       //  let arrFilterFake = getNameFilterCategory.filter((index, e) => e.checked);
-       //  let idCategory = []
-       //  for (let i = 0; i < arrFilterFake.length; i++) {
-       //      console.log(arrFilterFake[i].id)
-       //      idCategory[i] = arrFilterFake[i].id
-       //  }
-       //  let obj = {
-       //      idCategory: idCategory
-       //  }
-       // let {data} = await ProductAPI.filterAll(obj);
-       //  console.log(data)
+        fnLoadProduct().then()
     }
 
     return (
@@ -52,6 +71,7 @@ const ListProductPage = (props) => {
                 objFilter={props.objFilter}
                 fnAddCart={fnAddCart}
                 fnFilterCategory={fnFilterCategory}
+                fnFieldSort={fnFieldSort}
             />
         </>
     );

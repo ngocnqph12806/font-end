@@ -327,7 +327,7 @@ const DetailProductView = (props) => {
                                                            style={{display: "none"}} id={"upload-image"} />
                                                     <img src={images_upload} id={"img-review-upload"}
                                                          className={"mb-2"} onClick={() => document.getElementById('upload-image').click()}
-                                                    style={{maxHeight: 270}}/>
+                                                    style={{maxHeight: 350, width: "100%"}}/>
                                                     <button type={"submit"}
                                                             className="btn btn-success btn-order btn-block">
                                                         Gửi đánh giá

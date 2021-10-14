@@ -1,5 +1,5 @@
 import React from 'react';
-import {CheckToken, LoginAPI, ServerAPI} from "./AxiosAPI";
+import {LoginAPI, ServerAPI} from "./AxiosAPI";
 import {getSessionStorage} from "./UtilsAPI";
 
 const UserAPI = {

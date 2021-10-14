@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import SideBarListProduct from "../layout/product/SideBarListProduct";
 
-const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fnFilterCategory}) => {
+const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fnFilterCategory, fnFieldSort}) => {
 
     const [introProduct, setIntroProduct] = useState();
 
@@ -119,7 +119,7 @@ const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fn
                                 <div className="toolbox">
                                     <div className="toolbox-left">
                                         <div className="toolbox-info">
-                                            Hiển thị <span>9 / {listProducts.length}</span> sản phẩm
+                                            Hiển thị <span>{listProducts.length}</span> sản phẩm
                                         </div>
                                         {/* End .toolbox-info */}
                                     </div>
@@ -129,10 +129,10 @@ const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fn
                                             <label htmlFor="sortby">Sắp xếp:</label>
                                             <div className="select-custom">
                                                 <select name="sortby" id="sortby" className="form-control"
-                                                        defaultValue={`rating`}>
+                                                        defaultValue={`rating`} onChange={fnFieldSort}>
+                                                    <option value="date_desc">Mới nhất</option>
                                                     <option value="desc">Giá giảm dần</option>
                                                     <option value="asc">Giá tăng dần</option>
-                                                    <option value="date">Mới nhất</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -148,32 +148,13 @@ const ListProductView = ({listProducts, listCategories, objFilter, fnAddCart, fn
                                     {/* End .row */}
                                 </div>
                                 {/* End .products */}
-                                <nav aria-label="Page navigation">
-                                    <ul className="pagination justify-content-center">
-                                        <li className="page-item disabled">
-                                            <Link className="page-link page-link-prev" to="#" aria-label="Previous"
-                                                  tabIndex={-1} aria-disabled="true">
-                                                <span aria-hidden="true">
-                                                    <i className="icon-long-arrow-left"/>
-                                                </span>
-                                                Trước
-                                            </Link>
-                                        </li>
-                                        <li className="page-item active" aria-current="page">
-                                            <Link className="page-link" to="#">1</Link>
-                                        </li>
-                                        <li className="page-item"><Link className="page-link" to="#">2</Link></li>
-                                        <li className="page-item"><Link className="page-link" to="#">3</Link></li>
-                                        <li className="page-item-total">of 6</li>
-                                        <li className="page-item">
-                                            <Link className="page-link page-link-next" to="#" aria-label="Next">
-                                                Tiếp theo
-                                                <span aria-hidden="true"><i
-                                                    className="icon-long-arrow-right"/></span>
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                <div className="more-container text-center">
+                                    <button className="btn btn-outline-darker btn-more" id="load-more-list-product">
+                                        <i className="icon-long-arrow-down"/>
+                                        <span>Tải thêm sản phẩm</span>
+                                        <i className="icon-long-arrow-down"/>
+                                    </button>
+                                </div>
                             </div>
                             {/* End .col-lg-9 */}
                             <SideBarListProduct

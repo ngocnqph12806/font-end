@@ -26,40 +26,43 @@ const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
                                 <li className="megamenu-container active">
                                     <NavLink to="/index.html">Home</NavLink>
                                 </li>
-                                {
-                                    listCategories !== null && listCategories !== undefined
-                                        ? listCategories.map((category, index) => (
-                                            index < 4 ?
-                                                <li key={index}>
-                                                    <NavLink to={`/category/${category.idPath}/${category.path}`}>
-                                                        {category.name}
-                                                    </NavLink>
-                                                </li> : ""
-                                        ))
-                                        : ""
-                                }
-                                <li>
-                                    <NavLink to="/products" className="sf-with-ul">Xem thêm</NavLink>
-                                    <ul>
-                                        {
-                                            listCategories !== null && listCategories !== undefined
-                                                ? listCategories.map((category, index) => (
-                                                    index < 4 || index > 10 ? "" :
-                                                        <li key={index}>
-                                                            <NavLink to={`/category/${category.idPath}/${category.path}`}>
-                                                                {category.name}
-                                                            </NavLink>
-                                                        </li>
-                                                ))
-                                                : ""
-                                        }
-                                        <li>
-                                            <NavLink to={`/product`}>
-                                                Xem tất cả...
-                                            </NavLink>
-                                        </li>
-                                    </ul>
+                                <li className="megamenu-container">
+                                    <NavLink to="/product">Shop</NavLink>
                                 </li>
+                                {/*{*/}
+                                {/*    listCategories !== null && listCategories !== undefined*/}
+                                {/*        ? listCategories.map((category, index) => (*/}
+                                {/*            index < 4 ?*/}
+                                {/*                <li key={index}>*/}
+                                {/*                    <NavLink to={`/category/${category.idPath}/${category.path}`}>*/}
+                                {/*                        {category.name}*/}
+                                {/*                    </NavLink>*/}
+                                {/*                </li> : ""*/}
+                                {/*        ))*/}
+                                {/*        : ""*/}
+                                {/*}*/}
+                                {/*<li>*/}
+                                {/*    <NavLink to="/product" className="sf-with-ul">Xem thêm</NavLink>*/}
+                                {/*    <ul>*/}
+                                {/*        {*/}
+                                {/*            listCategories !== null && listCategories !== undefined*/}
+                                {/*                ? listCategories.map((category, index) => (*/}
+                                {/*                    index < 4 || index > 10 ? "" :*/}
+                                {/*                        <li key={index}>*/}
+                                {/*                            <NavLink to={`/category/${category.idPath}/${category.path}`}>*/}
+                                {/*                                {category.name}*/}
+                                {/*                            </NavLink>*/}
+                                {/*                        </li>*/}
+                                {/*                ))*/}
+                                {/*                : ""*/}
+                                {/*        }*/}
+                                {/*        <li>*/}
+                                {/*            <NavLink to={`/product`}>*/}
+                                {/*                Xem tất cả...*/}
+                                {/*            </NavLink>*/}
+                                {/*        </li>*/}
+                                {/*    </ul>*/}
+                                {/*</li>*/}
                             </ul>
                             {/* End .menu */}
                         </nav>

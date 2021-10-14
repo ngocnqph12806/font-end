@@ -1,5 +1,6 @@
 import React from 'react';
 import CartView from "../view/CartView";
+import swal from "sweetalert"
 
 const CartPage = (props) => {
 
@@ -22,10 +23,11 @@ const CartPage = (props) => {
     const fnUseCodeVouher = () => {
         let code = document.getElementById('add-code-voucher-cart').value
         if (code === null || code === undefined || code.trim() === '') {
+            swal("Cảnh báo", "Mã giảm giá gồm các ký tự đọc được", "warning").then()
             console.log("Mã giảm giá không được để trống")
             return;
         }
-        props.setCodeVoucher({code: code}) ? console.log("Đã áp dụng code") : console.log("Code không hợp lệ")
+        props.setCodeVoucher({code: code})
     }
 
     return (

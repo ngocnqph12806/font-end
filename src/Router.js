@@ -16,6 +16,7 @@ import CartPage from "./page/CartPage";
 import CheckoutPage from "./page/CheckoutPage";
 import LoginPage from "./page/LoginPage";
 import LogoutPage from "./page/LogoutPage";
+import WishlistPage from "./page/WishlistPage";
 
 const RouterDOM = (props) => {
     return (
@@ -24,6 +25,9 @@ const RouterDOM = (props) => {
                 <HeaderDOM {...props}/>
                 <main className="main">
                     <Switch>
+                        <Route exact path={['/wishlist', '/wishlist.html']}>
+                            <WishlistPage {...props}/>
+                        </Route>
                         <Route exact path={['/order', '/order.html']}>
                             <ListOrderPage {...props}/>
                         </Route>

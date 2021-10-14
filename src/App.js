@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import ProductAPI from "./service/ProductAPI";
 import {
     getLocalStorage,
-    getSessionStorage,
     removeSessionStorage,
     saveLocalStorage,
     saveSessionStorage
@@ -15,20 +14,20 @@ import UserAPI from "./service/UserAPI";
 import OrderAPI from "./service/OrderAPI";
 import jwt_decode from "jwt-decode";
 import {WishlistAPI} from "./service/WishlistAPI";
+import {useHistory} from "react-router-dom/cjs/react-router-dom";
+import swal from "sweetalert"
 
 const App = () => {
+
+    let history = useHistory();
 
     const [codeVoucher, setCodeVoucher] = useState();
 
     const [cart, setCart] = useState([]);
 
-    const [objFilter, setObjFilter] = useState({});
-
     const [totalPriceCart, setTotalPriceCart] = useState(0);
 
     const [listProducts, setListProducts] = useState([]);
-
-    const [listBanners, setListBanners] = useState([]);
 
     const [listCategories, setListCategories] = useState([]);
 
@@ -42,27 +41,28 @@ const App = () => {
 
     useEffect(() => {
         const getAccesstoken = async () => {
-            try {
-                let token = getSessionStorage("access_token")
-                if (token !== null && token !== undefined && token !== '') {
-                    let {data: {access_token}} = await UserAPI.checkLogin();
+            await UserAPI.checkLogin()
+                .then(s => {
+                    let {access_token} = s.data;
                     saveSessionStorage("access_token", access_token);
                     setUserLogin(jwt_decode(access_token).sub)
-                }
-            } catch (e) {
-                console.log('Xác nhận accesstoen thất bại')
-            }
+                })
+                .catch(e => {
+                    // swal("Thất bại", "Xác nhận đăng nhập không thành công", "error")
+                    console.log('Xác nhận accesstoen thất bại')
+                })
         }
         getAccesstoken().then(r => null);
-        const getListBanner = async () => {
-            try {
-                let {data} = await BannerAPI.getAll();
-                setListBanners(data)
-            } catch (e) {
-                console.log("Không thể đọc danh sách banner")
-            }
+        const getListProduct = async () => {
+            await ProductAPI.getAll()
+                .then(s => {
+                    let {data} = s
+                    setListProducts(data)
+                }).catch(e => {
+                    console.log("Không thể đọc danh sách sản phẩm")
+                });
         }
-        getListBanner().then(r => null);
+        getListProduct().then(r => null);
         const getListCategories = async () => {
             try {
                 let {data} = await CategoryAPI.getAll();
@@ -72,22 +72,35 @@ const App = () => {
             }
         }
         getListCategories().then(r => null)
-        const getListProducts = async () => {
-            try {
-                let response = await ProductAPI.getAll();
-                setListProducts([...response.data])
-            } catch (e) {
-                console.log("Không thể đọc danh sách sản phẩm");
-            }
-        }
-        getListProducts().then(r => null);
+    }, []);
+
+    useEffect(() => {
         const getCartStorage = () => {
             let cartStorage = getLocalStorage("cart_storage")
-            console.log(cartStorage)
-            setCart(cartStorage)
+            let cartFake = [];
+            listProducts.forEach(product => {
+                cartStorage.forEach(cart => {
+                    if (product.id === cart.product.id) {
+                        cartFake.push({
+                            product: {
+                                id: product.id,
+                                name: product.name,
+                                idPath: product.idPath,
+                                path: product.path,
+                                price: product.price,
+                                image: product.images !== null && product.images !== undefined && product.images.length > 0
+                                    ? product.images[0].path : ""
+                            },
+                            quantity: cart.quantity
+                        })
+                    }
+                })
+            })
+            setCart(cartFake)
         }
         getCartStorage()
-    }, []);
+    }, [listProducts]);
+
 
     useEffect(() => {
         if (cart !== null && cart !== undefined && cart.length >= 0) {
@@ -95,56 +108,66 @@ const App = () => {
         }
     }, [cart]);
 
-    useEffect(() => {
+    useEffect(async () => {
         if (userLogin !== null && userLogin !== undefined && userLogin.trim() !== '') {
-            const fnGetAllOrdersByUserLogin = async () => {
-                let {data} = await OrderAPI.findAllOrderByUserLogin();
-                setListOrders(data)
-            }
-            const fnGetAllWishlistsByUserLogin = async () => {
-                let {data} = await WishlistAPI.findAllWishlistByUserLogin();
-                setListWishlist(data)
-            }
-            const fnGetIdByUserLogin = async () => {
-                let {data} = await UserAPI.getIdByUsernameLogin(userLogin);
-                saveSessionStorage("id_user_login", data)
-            }
-            fnGetIdByUserLogin().catch(e => console.log('Lỗi get id'))
-            fnGetAllOrdersByUserLogin().catch(e => console.log('lỗi get list order'));
-            fnGetAllWishlistsByUserLogin().catch(e => console.log(' lỗi get list wishlist'));
+            await OrderAPI.findAllOrderByUserLogin()
+                .then(s => {
+                    let {data} = s;
+                    setListOrders(data)
+                }).catch(e => {
+                    console.log('lỗi get list order')
+                })
+            await WishlistAPI.findAllWishlistByUserLogin()
+                .then(s => {
+                    let {data} = s
+                    setListWishlist(data)
+                }).catch(e => {
+                    console.log(' lỗi get list wishlist')
+                })
+            await UserAPI.getIdByUsernameLogin(userLogin)
+                .then(s => {
+                    let {data} = s;
+                    saveSessionStorage("id_user_login", data)
+                }).catch(e => {
+                    console.log('Lỗi get id')
+                })
         }
     }, [userLogin]);
 
     const fnSetLogin = async (username, password) => {
-        try {
-            let {data: {access_token}} = await UserAPI.login(username, password)
-            console.log('Đăng nhập thành công')
-            console.log(access_token)
-            saveSessionStorage("access_token", access_token)
-            setUserLogin(username)
-            return true;
-        } catch (e) {
-            removeSessionStorage("access_token")
-            setUserLogin(username)
-        }
-        return false;
+        await UserAPI.login(username, password)
+            .then(s => {
+                let {access_token} = s.data
+                setUserLogin(username)
+                saveSessionStorage("access_token", access_token)
+                swal("", "Đăng nhập thành công", "success")
+                console.log('Đăng nhập thành công')
+                return true;
+            })
+            .catch(e => {
+                removeSessionStorage("access_token")
+                setUserLogin("")
+                console.log("remove token")
+                return false;
+            })
     }
 
     const fnSetInfoCheckout = async () => {
-        try {
-            let {data} = await UserAPI.getInfoCheckout();
+        await UserAPI.getInfoCheckout().then(s => {
+            let {data} = s
+            console.log('đã lấy dữ liệu checkout')
             setInfoCheckout(data);
-        } catch (e) {
+        }).catch(e => {
             console.log('get info checkkout error')
-        }
+        });
     }
 
     const fnSetCoceVoucher = async (voucher) => {
         // setCodeVoucher(code)
         if (voucher !== null && voucher !== undefined
             && voucher.code !== null && voucher.code !== undefined && voucher.code !== '') {
-            try {
-                let {data} = await VoucherAPI.getByCode(voucher)
+            await VoucherAPI.getByCode(voucher).then(s => {
+                let {data} = s
                 setCodeVoucher(data)
                 let total = cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0)
                 let result = Number(total) - Number(data.priceSale)
@@ -152,10 +175,12 @@ const App = () => {
                     result = 0;
                 }
                 setTotalPriceCart(result)
+                swal("Thành công", "Đã áp dụng mã giảm giá", "success")
                 return true;
-            } catch (e) {
+            }).catch(e => {
+                swal("Thất bại", "Mã giảm giá không tồn tại", "warning")
                 console.log("Mã giảm giá không tồn tại")
-            }
+            })
         }
         let total = cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0)
         setTotalPriceCart(Number(total))
@@ -166,7 +191,6 @@ const App = () => {
     const fnSetCart = (obj) => {
         saveLocalStorage("cart_storage", obj);
         setCart(obj);
-        // setTotalPriceCart(cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0))
         fnSetCoceVoucher(codeVoucher).then(r => null)
     }
 
@@ -191,6 +215,7 @@ const App = () => {
                     if (objCart[i].product.id !== null && objCart[i].product.id !== undefined && objCart[i].product.id === product.id) {
                         quantity = Number(objCart[i].quantity) + Number(quantity);
                         if (Number(objCart[i].quantity) >= 10) {
+                            swal("Cảnh báo", "Bạn chỉ có thể thêm vào giỏ hàng tối đa mỗi sản phẩm 10 đơn vị", "warning").then()
                             console.log('Số lượng đã đạt tối đa')
                             return;
                         }
@@ -199,6 +224,7 @@ const App = () => {
                         }
                         objCart[i].quantity = quantity
                         fnSetCart(objCart);
+                        swal("Thành công", "Đã thêm giỏ hàng", "success").then()
                         console.log('Lưu thành công')
                         return;
                     }
@@ -210,16 +236,40 @@ const App = () => {
         }
         let objFake = [objNewCart]
         fnSetCart(objFake);
+        swal("Thành công", "Đã thêm giỏ hàng", "success").then()
         console.log('Lưu thành công')
+    }
+
+    const fnWishlist = (product) => {
+        if (userLogin !== null && userLogin !== undefined && userLogin !== '') {
+            let objWishlist = {idProduct: product.id}
+            WishlistAPI.update(objWishlist)
+                .then(r => {
+                        if (r.data) {
+                            setListWishlist([...listWishlist, objWishlist])
+                            swal("Thành công", "Sản phẩm đã thêm vào danh sách yêu thích của bạn", "success").then()
+                            console.log("Đã thêm yêu thích")
+                        } else {
+                            if (listWishlist !== null && listWishlist !== undefined) {
+                                let arrWishlistFake = listWishlist.filter(e => e.idProduct !== objWishlist.idProduct)
+                                setListWishlist(arrWishlistFake);
+                            }
+                            swal("Thành công", "Đã xoá sản phẩm khỏi danh sách yêu thích của bạn", "success").then()
+                            console.log("Đã huỷ yêu thích")
+                        }
+                    }
+                )
+        } else {
+            history.push("/login")
+        }
     }
 
     return (
         <>
             <RouterDOM
                 listProducts={listProducts}
-                listBanners={listBanners}
+                setListProducts={setListProducts}
                 listCategories={listCategories}
-                objFilter={objFilter}
                 cart={cart}
                 fnAddCart={fnAddCart}
                 setCart={fnSetCart}
@@ -234,6 +284,7 @@ const App = () => {
                 setListWishlist={setListWishlist}
                 listOrders={listOrders}
                 setListOrders={setListOrders}
+                fnWishlist={fnWishlist}
             />
         </>
     );
