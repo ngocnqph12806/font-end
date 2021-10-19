@@ -1,11 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import CardProductHome from "../layout/home/CardProductHome";
-import {WishlistAPI} from "../service/WishlistAPI";
-import {useHistory} from "react-router-dom/cjs/react-router-dom";
 
 const WishlistPage = (props) => {
-
-    let history = useHistory();
 
     const [listProductWishlist, setListProductWishlist] = useState([]);
 

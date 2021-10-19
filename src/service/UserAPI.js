@@ -33,6 +33,10 @@ const UserAPI = {
     getIdByUsernameLogin(userLogin) {
         let url = `/users/get-id-by-user-login?username=${userLogin}`
         return ServerAPI.get(url);
+    },
+    register(obj) {
+        let url = `/users/register`
+        return ServerAPI.post(url, obj);
     }
 };
 

@@ -55,27 +55,6 @@ const HomePage = (props) => {
         setNumberPageListAllProductNow(numberPage)
     }
 
-    // const fnWishlist = (product) => {
-    //     if (props.userLogin !== null && props.userLogin !== undefined && props.userLogin !== '') {
-    //         let objWishlist = {idProduct: product.id}
-    //         WishlistAPI.update(objWishlist)
-    //             .then(r => {
-    //                     if (r.data) {
-    //                         props.setListWishlist([...props.listWishlist, objWishlist])
-    //                         console.log("Đã thêm yêu thích")
-    //                     } else {
-    //                         if (props.listWishlist !== null && props.listWishlist !== undefined) {
-    //                             let arrWishlistFake = props.listWishlist.filter(e => e.idProduct !== objWishlist.idProduct)
-    //                             props.setListWishlist(arrWishlistFake);
-    //                         }
-    //                         console.log("Đã huỷ yêu thích")
-    //                     }
-    //                 }
-    //             )
-    //     } else {
-    //         history.push("/login")
-    //     }
-    // }
 
     return (
         <>

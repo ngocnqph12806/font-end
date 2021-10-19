@@ -7,22 +7,11 @@ const TopBarHeader = (props) => {
             <div className="container">
                 <div className="header-left">
                     <div className="header-dropdown">
-                        <NavLink to="#">Usd</NavLink>
-                        <div className="header-menu">
-                            <ul>
-                                <li><NavLink to="#">Eur</NavLink></li>
-                                <li><NavLink to="#">Usd</NavLink></li>
-                            </ul>
-                        </div>
-                        {/* End .header-menu */}
-                    </div>
-                    {/* End .header-dropdown */}
-                    <div className="header-dropdown">
                         <NavLink to="#">VI</NavLink>
                         <div className="header-menu">
                             <ul>
-                                <li><NavLink to="#">Tiếng Việt</NavLink></li>
-                                <li><NavLink to="#">English</NavLink></li>
+                                <li><a href="#">Tiếng Việt</a></li>
+                                <li><a href="#">English</a></li>
                             </ul>
                         </div>
                         {/* End .header-menu */}
@@ -33,35 +22,51 @@ const TopBarHeader = (props) => {
                 <div className="header-right">
                     <ul className="top-menu">
                         <li>
-                            <NavLink to="#">Links</NavLink>
+                            <NavLink to="#">Liên kết</NavLink>
                             <ul>
-                                <li><NavLink to="tel:#"><i className="icon-phone"/>Call: +0123 456 789</NavLink></li>
-                                <li>
-                                    <NavLink to="wishlist.html"><i className="icon-heart-o"/>My
-                                        Wishlist <span>
-                                        ({props.listWishlist !== null && props.listWishlist !== undefined ? props.listWishlist.length : 0})
-                                    </span>
-                                    </NavLink>
-                                </li>
-                                <li><NavLink to="about.html">About Us</NavLink></li>
-                                <li><NavLink to="contact.html">Contact Us</NavLink></li>
-                                <li>
-                                    {
-                                        props.userLogin !== null && props.userLogin !== undefined && props.userLogin.trim() !== ''
-                                            ? (
-                                                <NavLink to="/logout" data-toggle="modal">
-                                                    <i className="icon-user"/>
-                                                    Đăng xuất
-                                                </NavLink>
-                                            )
-                                            : (
-                                                <NavLink to="/login" data-toggle="modal">
-                                                    <i className="icon-user"/>
-                                                    Đăng nhập
-                                                </NavLink>
-                                            )
-                                    }
-                                </li>
+                                <li><NavLink to="tel:#"><i className="icon-phone"/>Di động: +0123 456 789</NavLink></li>
+                                {
+                                    props.userLogin !== null && props.userLogin !== undefined && props.userLogin.trim() !== ''
+                                        ? (
+                                            <>
+                                                <li>
+                                                    <NavLink to="/wishlist.html"><i className="icon-heart-o"/>
+                                                        Sản phẩm yêu thích
+                                                        <span>
+                                                            ({props.listWishlist !== null && props.listWishlist !== undefined ? props.listWishlist.length : 0})
+                                                        </span>
+                                                    </NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/order.html"><i className="icon-cart-plus"/>
+                                                        Hoá đơn mua hàng
+                                                        <span>
+                                                            ({props.listOrders !== null && props.listOrders !== undefined ? props.listOrders.length : 0})
+                                                        </span>
+                                                    </NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/profile">Thông tin cá nhân</NavLink>
+                                                </li>
+                                                <li>
+                                                    <NavLink to="/logout" data-toggle="modal">
+                                                        <i className="icon-user"/>
+                                                        Đăng xuất
+                                                    </NavLink>
+                                                </li>
+                                            </>
+                                        )
+                                        : (
+                                            <>
+                                                <li>
+                                                    <NavLink to="/login" data-toggle="modal">
+                                                        <i className="icon-user"/>
+                                                        Đăng nhập
+                                                    </NavLink>
+                                                </li>
+                                            </>
+                                        )
+                                }
                             </ul>
                         </li>
                     </ul>

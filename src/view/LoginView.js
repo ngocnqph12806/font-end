@@ -1,5 +1,7 @@
 import React from 'react';
 import {useForm} from "react-hook-form";
+import {Link} from "react-router-dom";
+import image_upload from '../images/upload.jpg'
 
 const LoginView = (props) => {
 
@@ -96,17 +98,62 @@ const LoginView = (props) => {
                                 {/* .End .tab-pane */}
                                 <div className="tab-pane fade" id="register-2" role="tabpanel"
                                      aria-labelledby="register-tab-2">
-                                    <form action="#">
+                                    <form onSubmit={props.fnSubmitRegister} id="id-form-register">
                                         <div className="form-group">
-                                            <label htmlFor="register-email-2">Địa chỉ email của bạn *</label>
-                                            <input type="email" className="form-control" id="register-email-2"
-                                                   name="register-email" required/>
+                                            <label>Tên đăng nhập *</label>
+                                            <input type="username" className="form-control" maxLength={32}
+                                                   name="username" required/>
                                         </div>
                                         {/* End .form-group */}
                                         <div className="form-group">
-                                            <label htmlFor="register-password-2">Mật khẩu *</label>
-                                            <input type="password" className="form-control" id="register-password-2"
-                                                   name="register-password" required/>
+                                            <label>Mật khẩu *</label>
+                                            <input type="password" className="form-control" maxLength={50}
+                                                   name="password" required/>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Nhập lại mật khẩu *</label>
+                                            <input type="password" className="form-control" maxLength={50}
+                                                   name="registerPassword" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Họ và tên *</label>
+                                            <input type="text" className="form-control" maxLength={50}
+                                                   name="fullName" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Ngày sinh *</label>
+                                            <input type="text" className="form-control" maxLength={10}
+                                                   name="dateOfBirth" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Số điện thoại *</label>
+                                            <input type="text" className="form-control" maxLength={15}
+                                                   name="phoneNumber" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Địa chỉ email *</label>
+                                            <input type="email" className="form-control" maxLength={50}
+                                                   name="email" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Địa chỉ *</label>
+                                            <input type="address" className="form-control" maxLength={100}
+                                                   minLength={10} name="address" required/>
+                                        </div>
+                                        {/* End .form-group */}
+                                        <div className="form-group">
+                                            <label>Ảnh đại diện *</label>
+                                            <img src={image_upload} alt="Ảnh đại điện" style={{maxHeight: 300}}
+                                                 id="img-avatar-upload"
+                                                 onClick={() => document.getElementById('register-avatar').click()}/>
+                                            <input type="file" className="form-control" id="register-avatar"
+                                                   onChange={props.fnUploadFileAvatar} required accept={"image/jpeg"}
+                                                   hidden={true}/>
                                         </div>
                                         {/* End .form-group */}
                                         <div className="form-footer">
@@ -116,35 +163,14 @@ const LoginView = (props) => {
                                             </button>
                                             <div className="custom-control custom-checkbox">
                                                 <input type="checkbox" className="custom-control-input"
-                                                       id="register-policy-2" required/>
-                                                <label className="custom-control-label" htmlFor="register-policy-2">I
-                                                    agree to the <a href="#">privacy policy</a> *</label>
+                                                       id="register-policy-2" name="checkbox" required/>
+                                                <label className="custom-control-label" htmlFor="register-policy-2">
+                                                    Tôi đồng ý <Link to="#">điều khoản sử dụng</Link> website *</label>
                                             </div>
                                             {/* End .custom-checkbox */}
                                         </div>
                                         {/* End .form-footer */}
                                     </form>
-                                    <div className="form-choice">
-                                        <p className="text-center">or sign in with</p>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <a href="#" className="btn btn-login btn-g">
-                                                    <i className="icon-google"/>
-                                                    Login With Google
-                                                </a>
-                                            </div>
-                                            {/* End .col-6 */}
-                                            <div className="col-sm-6">
-                                                <a href="#" className="btn btn-login  btn-f">
-                                                    <i className="icon-facebook-f"/>
-                                                    Login With Facebook
-                                                </a>
-                                            </div>
-                                            {/* End .col-6 */}
-                                        </div>
-                                        {/* End .row */}
-                                    </div>
-                                    {/* End .form-choice */}
                                 </div>
                                 {/* .End .tab-pane */}
                             </div>

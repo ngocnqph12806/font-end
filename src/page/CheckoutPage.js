@@ -2,8 +2,8 @@ import React, {useEffect} from 'react';
 import CheckoutView from "../view/CheckoutView";
 import $ from 'jquery'
 import {useHistory} from "react-router-dom/cjs/react-router-dom";
-import ProductAPI from "../service/ProductAPI";
 import OrderAPI from "../service/OrderAPI";
+import swal from "sweetalert";
 
 const CheckoutPage = (props) => {
 
@@ -23,10 +23,11 @@ const CheckoutPage = (props) => {
     const fnUseCodeVouher = () => {
         let code = document.getElementById('add-code-voucher-checkout').value
         if (code === null || code === undefined || code.trim() === '') {
+            swal("Cảnh báo", "Mã giảm giá gồm các ký tự đọc được", "warning").then()
             console.log("Mã giảm giá không được để trống")
             return;
         }
-        props.setCodeVoucher(code) ? console.log("Đã áp dụng code") : console.log("Code không hợp lệ")
+        props.setCodeVoucher(code)
     }
 
     const fnSaveCheckout = async () => {
@@ -58,21 +59,28 @@ const CheckoutPage = (props) => {
         console.log(obj)
         await OrderAPI.save(obj)
             .then(s => {
+                let {data} = s
+                swal("Thành công", "Đã lưu hoá đơn mua hàng", "success").then(async t => {
+                    props.setCart({});
+                    if (data.paymentMethod === 'online') {
+                        await OrderAPI.payment(data.id, 'http://localhost:3000').then(payment => {
+                            window.location = payment.data
+                        }).catch(e => {
+                            swal("Thất bại", "Không thể thanh toán ngay lúc này. Vui lòng vào hoá đơn mua hàng và thanh toán lại~", "warning")
+                        });
+                    }
+                    window.location = '/order.html'
+                })
                 console.log('Thêm hoá đơn thành công')
-                props.setCart({});
-
             })
             .catch(e => {
+                swal("Thất bại", "Lưu hoá đơn mua hàng thất bại", "error")
                 console.log('Thêm hoá đơn thất bại')
-
             });
-
     }
 
     const fnClickGetInfoCheckout = (e) => {
-        if (e.target.checked) {
-            props.fnSetInfoCheckout()
-        }
+        if (e.target.checked) props.fnSetInfoCheckout()
     }
 
     return (

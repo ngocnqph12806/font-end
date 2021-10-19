@@ -21,7 +21,6 @@ const ListProductPage = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log("vafo ddaay")
         fnLoadProduct().then()
     }, [numberPageNow, fieldSort, typeSort]);
 

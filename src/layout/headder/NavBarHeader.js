@@ -15,7 +15,7 @@ const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
                 <div className="container">
                     <div className="header-left">
                         <button className="mobile-menu-toggler">
-                            <span className="sr-only">Toggle mobile menu</span>
+                            <span className="sr-only">Chuyển đổi menu</span>
                             <i className="icon-bars"/>
                         </button>
                         <NavLink to="/index.html" className="logo">
@@ -24,10 +24,10 @@ const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
                         <nav className="main-nav">
                             <ul className="menu sf-arrows">
                                 <li className="megamenu-container active">
-                                    <NavLink to="/index.html">Home</NavLink>
+                                    <NavLink to="/index.html">Trang chủ</NavLink>
                                 </li>
                                 <li className="megamenu-container">
-                                    <NavLink to="/product">Shop</NavLink>
+                                    <NavLink to="/product">Cửa hàng</NavLink>
                                 </li>
                                 {/*{*/}
                                 {/*    listCategories !== null && listCategories !== undefined*/}
@@ -76,9 +76,9 @@ const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
                             </NavLink>
                             <form action="#" method="get">
                                 <div className="header-search-wrapper">
-                                    <label htmlFor="q" className="sr-only">Search</label>
+                                    <label htmlFor="q" className="sr-only">Tìm kiếm</label>
                                     <input type="search" className="form-control" name="q" id="q"
-                                           placeholder="Search in..." required/>
+                                           placeholder="Nhập từ khoá tìm kiếm sản phẩm..." required/>
                                 </div>
                                 {/* End .header-search-wrapper */}
                             </form>
@@ -140,16 +140,16 @@ const NavBarHeader = ({listCategories, cart, setCart, totalPriceCart}) => {
                                 </div>
                                 {/* End .cart-product */}
                                 <div className="dropdown-cart-total">
-                                    <span>Total</span>
+                                    <span>Tổng tiền</span>
                                     <span className="cart-total-price">
                                         {totalPriceCart}
                                     </span>
                                 </div>
                                 {/* End .dropdown-cart-total */}
                                 <div className="dropdown-cart-action">
-                                    <NavLink to="/cart.html" className="btn btn-primary">View Cart</NavLink>
+                                    <NavLink to="/cart.html" className="btn btn-primary">Giỏ hàng</NavLink>
                                     <NavLink to="/checkout.html" className="btn btn-outline-primary-2">
-                                        <span>Checkout</span>
+                                        <span>Thanh toán</span>
                                         <i className="icon-long-arrow-right"/>
                                     </NavLink>
                                 </div>

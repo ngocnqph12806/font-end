@@ -10,6 +10,7 @@ const HeaderDOM = (props) => {
                     userLogin={props.userLogin}
                     fnSetLogin={props.fnSetLogin}
                     listWishlist={props.listWishlist}
+                    listOrders={props.listOrders}
                 />
                 <NavBarHeader
                     listCategories={props.listCategories}

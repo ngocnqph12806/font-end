@@ -53,10 +53,12 @@ const DetailsProductPage = (props) => {
                 .then(r => {
                         setWishList(!wishList)
                         if (r.data) {
+                            swal("Thành công", "Sản phẩm đã thêm vào danh sách yêu thích của bạn", "success").then()
                             props.setListWishlist([...props.listWishlist, objWishlist])
                         } else {
                             if (props.listWishlist !== null && props.listWishlist !== undefined) {
                                 let arrWishlistFake = props.listWishlist.filter(e => e.idProduct !== objWishlist.idProduct)
+                                swal("Thành công", "Đã xoá sản phẩm khỏi danh sách yêu thích của bạn", "success").then()
                                 props.setListWishlist(arrWishlistFake);
                             }
                         }
@@ -75,14 +77,20 @@ const DetailsProductPage = (props) => {
             value.images = [nameFile]
         }
         await ProductAPI.saveReview(value)
-            .then(e => console.log("Thêm review thành công"))
+            .then(s => {
+                swal("Thành công", "Bạn đã thêm đánh giá", "success").then(t => {
+                    window.location.reload()
+                })
+            })
             .catch(r => {
                 console.log("Thêm review thất bại")
                 if ((r + '').includes('500')) {
                     console.log("Bạn đã đánh giá rồi")
                     swal('Thất bại', 'Bạn đã đánh giá cho sản phẩm này rồi', 'error')
-                }else if ((r + '').includes('403')) {
-                    swal('Thất bại', 'Vui lòng đăng nhập trước khi gửi đánh giá', 'error')
+                }else if ((r + '').includes('403') || (r + '').includes('404')) {
+                    swal('Thất bại', 'Vui lòng đăng nhập trước khi gửi đánh giá', 'error').then(t => {
+                        history.push("/login")
+                    })
                 }
             })
     }
@@ -96,9 +104,6 @@ const DetailsProductPage = (props) => {
             document.getElementById('img-review-upload').src = data
         }
     }
-
-    // find average age of students
-    
 
     return (
         <>

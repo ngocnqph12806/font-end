@@ -17,6 +17,7 @@ import CheckoutPage from "./page/CheckoutPage";
 import LoginPage from "./page/LoginPage";
 import LogoutPage from "./page/LogoutPage";
 import WishlistPage from "./page/WishlistPage";
+import ForgotPage from "./page/ForgotPage";
 
 const RouterDOM = (props) => {
     return (
@@ -28,14 +29,14 @@ const RouterDOM = (props) => {
                         <Route exact path={['/wishlist', '/wishlist.html']}>
                             <WishlistPage {...props}/>
                         </Route>
-                        <Route exact path={['/order', '/order.html']}>
-                            <ListOrderPage {...props}/>
-                        </Route>
                         <Route exact path={['/cart', '/cart.html']}>
                             <CartPage {...props}/>
                         </Route>
                         <Route exact path={['/checkout', '/checkout.html']}>
                             <CheckoutPage {...props}/>
+                        </Route>
+                        <Route exact path={['/order', '/order.html']}>
+                            <ListOrderPage {...props}/>
                         </Route>
                         <Route exact path={'/order/:id'}>
                             <DetailOrderPage {...props}/>
@@ -60,6 +61,9 @@ const RouterDOM = (props) => {
                         </Route>
                         <Route exact path={['/logout', '/logout.html']}>
                             <LogoutPage {...props}/>
+                        </Route>
+                        <Route exact path={['/forgot-password', '/forgot-password.html']}>
+                            <ForgotPage {...props}/>
                         </Route>
                         <Route exact path={['/', '/index.html']}>
                             <HomePage {...props}/>

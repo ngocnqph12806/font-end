@@ -324,7 +324,7 @@ const DetailProductView = (props) => {
                                                                   minLength: 10,
                                                               })}/>
                                                     <input type={"file"} className={"form-control"} onChange={props.fnUploadFile}
-                                                           style={{display: "none"}} id={"upload-image"} />
+                                                           style={{display: "none"}} id={"upload-image"} accept={"image/jpeg"}/>
                                                     <img src={images_upload} id={"img-review-upload"}
                                                          className={"mb-2"} onClick={() => document.getElementById('upload-image').click()}
                                                     style={{maxHeight: 350, width: "100%"}}/>

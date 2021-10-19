@@ -21,7 +21,7 @@ const App = () => {
 
     let history = useHistory();
 
-    const [codeVoucher, setCodeVoucher] = useState();
+    const [codeVoucher, setCodeVoucher] = useState({id: null, code: "", priceSale: 0});
 
     const [cart, setCart] = useState([]);
 
@@ -78,24 +78,27 @@ const App = () => {
         const getCartStorage = () => {
             let cartStorage = getLocalStorage("cart_storage")
             let cartFake = [];
-            listProducts.forEach(product => {
-                cartStorage.forEach(cart => {
-                    if (product.id === cart.product.id) {
-                        cartFake.push({
-                            product: {
-                                id: product.id,
-                                name: product.name,
-                                idPath: product.idPath,
-                                path: product.path,
-                                price: product.price,
-                                image: product.images !== null && product.images !== undefined && product.images.length > 0
-                                    ? product.images[0].path : ""
-                            },
-                            quantity: cart.quantity
-                        })
-                    }
+            if (listProducts !== null && listProducts !== undefined
+                && cartStorage !== null && cartStorage !== undefined && cartStorage.length > 0) {
+                listProducts.forEach(product => {
+                    cartStorage.forEach(cart => {
+                        if (product.id === cart.product.id) {
+                            cartFake.push({
+                                product: {
+                                    id: product.id,
+                                    name: product.name,
+                                    idPath: product.idPath,
+                                    path: product.path,
+                                    price: product.price,
+                                    image: product.images !== null && product.images !== undefined && product.images.length > 0
+                                        ? product.images[0].path : ""
+                                },
+                                quantity: cart.quantity
+                            })
+                        }
+                    })
                 })
-            })
+            }
             setCart(cartFake)
         }
         getCartStorage()
@@ -108,11 +111,14 @@ const App = () => {
         }
     }, [cart]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(async () => {
         if (userLogin !== null && userLogin !== undefined && userLogin.trim() !== '') {
             await OrderAPI.findAllOrderByUserLogin()
                 .then(s => {
                     let {data} = s;
+                    console.log("order")
+                    console.log(data)
                     setListOrders(data)
                 }).catch(e => {
                     console.log('lỗi get list order')
@@ -140,7 +146,9 @@ const App = () => {
                 let {access_token} = s.data
                 setUserLogin(username)
                 saveSessionStorage("access_token", access_token)
-                swal("", "Đăng nhập thành công", "success")
+                swal("", "Đăng nhập thành công", "success").then(s => {
+                    window.location = '/index.html'
+                })
                 console.log('Đăng nhập thành công')
                 return true;
             })
@@ -163,7 +171,6 @@ const App = () => {
     }
 
     const fnSetCoceVoucher = async (voucher) => {
-        // setCodeVoucher(code)
         if (voucher !== null && voucher !== undefined
             && voucher.code !== null && voucher.code !== undefined && voucher.code !== '') {
             await VoucherAPI.getByCode(voucher).then(s => {
@@ -180,13 +187,18 @@ const App = () => {
             }).catch(e => {
                 swal("Thất bại", "Mã giảm giá không tồn tại", "warning")
                 console.log("Mã giảm giá không tồn tại")
+                let total = cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0)
+                setTotalPriceCart(Number(total))
+                setCodeVoucher({id: null, code: "", priceSale: 0})
             })
+        } else {
+            let total = cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0)
+            setTotalPriceCart(Number(total))
+            setCodeVoucher({id: null, code: "", priceSale: 0})
         }
-        let total = cart.reduce((a, v) => a = a + v.product.price * v.quantity, 0)
-        setTotalPriceCart(Number(total))
-        setCodeVoucher({id: null, code: "", priceSale: 0})
-        return false;
     }
+
+    console.log(codeVoucher)
 
     const fnSetCart = (obj) => {
         saveLocalStorage("cart_storage", obj);
@@ -260,7 +272,9 @@ const App = () => {
                     }
                 )
         } else {
-            history.push("/login")
+            swal("Thất bại", "Vui lòng đăng nhập", "warning").then(s => {
+                window.location = '/login'
+            })
         }
     }
 

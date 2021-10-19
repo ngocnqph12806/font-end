@@ -27,6 +27,10 @@ const OrderAPI = {
     findAllOrderByUserLogin() {
         let url = `/orders/get-by-user-login?id=${getSessionStorage("id_user_login")}`
         return ServerAPI.get(url);
+    },
+    payment(id, link) {
+        let url = `/orders/payment`
+        return ServerAPI.post(url, {id: id, url: link})
     }
 };
 
